@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- For development: allow cleartext traffic to weatherapi.com -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">api.weatherapi.com</domain>
+    </domain-config>
+
+    <!-- Alternative: Allow all cleartext traffic (NOT RECOMMENDED for production) -->
+    <!-- <base-config cleartextTrafficPermitted="true"> -->
+    <!-- </base-config> -->
+</network-security-config>
