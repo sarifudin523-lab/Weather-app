@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "339956810306",
+    "firebase_url": "https://weatherchatapp-bb9db-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "weatherchatapp-bb9db",
+    "storage_bucket": "weatherchatapp-bb9db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339956810306:android:e45968d4e75b8da3b663db",
+        "android_client_info": {
+          "package_name": "com.example.weatherdemo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhlieBV6W9r5mh_Bdve8gk_pnkRjKkvmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
