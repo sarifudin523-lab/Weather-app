@@ -8,7 +8,7 @@ object FirebaseUtils {
 
     private val database = FirebaseDatabase.getInstance()
 
-    // ✅ node khusus untuk chat global
+    // ✅ nodee khusus untuk chat global
     private val messagesRef = database.getReference("global_chat")
 
     fun sendMessage(username: String, message: String, time: String) {
