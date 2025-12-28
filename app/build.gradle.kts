@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -37,6 +38,7 @@ android {
 
 dependencies {
 
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -45,6 +47,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.cardview:cardview:1.0.0")
 
 
     implementation ("com.google.android.material:material:1.8.0")
@@ -57,4 +62,14 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     implementation ("androidx.activity:activity-ktx:1.7.2")
+
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+
+    // Firebase SDK
+    implementation("com.google.firebase:firebase-auth:21.1.0") // Firebase Authentication untuk login
+    implementation("com.google.firebase:firebase-database:20.0.5") // Firebase Realtime Database
+
+    // Firebase BoM (Bill of Materials)
+    implementation(platform("com.google.firebase:firebase-bom:30.3.1"))  // Pastikan semua Firebase SDK menggunakan versi yang kompatibel
 }
+apply(plugin = "com.google.gms.google-services")

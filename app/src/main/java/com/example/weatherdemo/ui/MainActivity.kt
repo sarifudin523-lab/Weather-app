@@ -1,15 +1,18 @@
 package com.example.weatherdemo.ui
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.weatherdemo.R
 import com.example.weatherdemo.data.api.RetrofitInstance
@@ -19,38 +22,36 @@ import com.example.weatherdemo.viewmodel.WeatherViewModel
 import com.example.weatherdemo.viewmodel.WeatherViewModelFactory
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-/**
- * Main Activity class that handles UI and user interactions
- * Observes ViewModel LiveData and updates UI accordingly
- */
 class MainActivity : AppCompatActivity() {
 
-    // Initialize ViewModel using viewModels delegate
     private val viewModel: WeatherViewModel by viewModels {
-        // Create ViewModel with repository dependency
-        WeatherViewModelFactory(
-            WeatherRepository(RetrofitInstance.apiService)
-        )
+        WeatherViewModelFactory(WeatherRepository(RetrofitInstance.apiService))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize UI components
+        // ✅ FIX DI SINI SAJA
+        val username = intent.getStringExtra("username") ?: "Guest"
+
+        val tvWelcomeMessage = findViewById<TextView>(R.id.tvWelcomeMessage)
+        tvWelcomeMessage.text = "Welcome, $username!"
+
+        // FAB chat → kirim username ke ChatActivity
+        findViewById<FloatingActionButton>(R.id.fabChat).setOnClickListener {
+            val i = Intent(this, ChatActivity::class.java)
+            i.putExtra("username", username)
+            startActivity(i)
+        }
+
         initViews()
-
-        // Set up observers for LiveData
         setupObservers()
-
-        // Load default location weather
         viewModel.fetchWeatherData("London")
     }
 
-    /**
-     * Initializes UI components and sets up click listeners
-     */
     private fun initViews() {
         val btnSearch = findViewById<MaterialButton>(R.id.btnSearch)
         val etSearch = findViewById<EditText>(R.id.etSearch)
@@ -58,9 +59,7 @@ class MainActivity : AppCompatActivity() {
         btnSearch.setOnClickListener {
             val location = etSearch.text.toString().trim()
             if (location.isNotEmpty()) {
-                // Hide keyboard
                 hideKeyboard()
-                // Fetch weather data for entered location
                 viewModel.fetchWeatherData(location)
             } else {
                 Toast.makeText(this, "Please enter a location", Toast.LENGTH_SHORT).show()
@@ -68,31 +67,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Sets up observers for ViewModel LiveData
-     * Observes weather data, loading state, and error messages
-     */
     private fun setupObservers() {
-        // Observe weather data changes
         viewModel.weatherData.observe(this, Observer { weatherData ->
-            weatherData?.let {
-                updateWeatherUI(it)
-            }
+            weatherData?.let { updateWeatherUI(it) }
         })
 
-        // Observe loading state
         viewModel.isLoading.observe(this, Observer { isLoading ->
-            val progressBar = findViewById<ProgressBar>(R.id.progressBar)
-            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            findViewById<ProgressBar>(R.id.progressBar).visibility =
+                if (isLoading) View.VISIBLE else View.GONE
         })
 
-        // Observe error messages
         viewModel.errorMessage.observe(this, Observer { errorMessage ->
             val tvError = findViewById<TextView>(R.id.tvError)
             if (errorMessage.isNotEmpty()) {
                 tvError.text = errorMessage
                 tvError.visibility = View.VISIBLE
-                // Hide weather card on error
                 findViewById<MaterialCardView>(R.id.weatherCard).visibility = View.GONE
                 Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
             } else {
@@ -101,10 +90,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    /**
-     * Updates UI with weather data
-     * @param weatherResponse The weather data to display
-     */
     private fun updateWeatherUI(weatherResponse: WeatherResponse) {
         val weatherCard = findViewById<MaterialCardView>(R.id.weatherCard)
         val tvLocation = findViewById<TextView>(R.id.tvLocation)
@@ -114,7 +99,6 @@ class MainActivity : AppCompatActivity() {
         val tvHumidity = findViewById<TextView>(R.id.tvHumidity)
         val tvWind = findViewById<TextView>(R.id.tvWind)
 
-        // Update UI with weather data
         tvLocation.text = "${weatherResponse.location.name}, ${weatherResponse.location.country}"
         tvTemperature.text = "${weatherResponse.current.temp_c}°C"
         tvCondition.text = weatherResponse.current.condition.text
@@ -122,13 +106,35 @@ class MainActivity : AppCompatActivity() {
         tvHumidity.text = "${weatherResponse.current.humidity}%"
         tvWind.text = "${weatherResponse.current.wind_kph} km/h"
 
-        // Show weather card
+        val condition = weatherResponse.current.condition.text.lowercase()
+        val mainLayout = findViewById<LinearLayout>(R.id.mainLayout)
+
+        when {
+            condition.contains("clear") || condition.contains("sunny") -> {
+                weatherCard.setCardBackgroundColor(ContextCompat.getColor(this, R.color.sunny))
+                mainLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.sunny_background))
+            }
+            condition.contains("rain") -> {
+                weatherCard.setCardBackgroundColor(ContextCompat.getColor(this, R.color.rainy))
+                mainLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.rainy_background))
+            }
+            condition.contains("cloudy") -> {
+                weatherCard.setCardBackgroundColor(ContextCompat.getColor(this, R.color.cloudy))
+                mainLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.cloudy_background))
+            }
+            condition.contains("snow") -> {
+                weatherCard.setCardBackgroundColor(ContextCompat.getColor(this, R.color.snowy))
+                mainLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.snowy_background))
+            }
+            else -> {
+                weatherCard.setCardBackgroundColor(ContextCompat.getColor(this, R.color.default_weather))
+                mainLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.default_weather_background))
+            }
+        }
+
         weatherCard.visibility = View.VISIBLE
     }
 
-    /**
-     * Hides the soft keyboard
-     */
     private fun hideKeyboard() {
         val view = this.currentFocus
         view?.let {

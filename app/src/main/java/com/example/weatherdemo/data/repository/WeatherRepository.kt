@@ -20,7 +20,7 @@ class WeatherRepository(private val apiService: WeatherApiService) {
         return try {
             // Make API call
             val response: Response<WeatherResponse> = apiService.getCurrentWeather(
-                key = "YOUR_API_KEY", // API key
+                key = "822615b3cef1437bb0202739251712", // API key
                 query = location
             )
 

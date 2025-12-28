@@ -8,11 +8,34 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Custom colors for our weather app -->
+    <!-- Custom colors for weather app (Updated - No Transparent White) -->
     <color name="button_color">#2196F3</color>
     <color name="error_color">#FF5252</color>
-    <color name="hint_color">#B3FFFFFF</color>
-    <color name="label_color">#CCFFFFFF</color>
-    <color name="card_background">#4DFFFFFF</color>
-    <color name="weather_card_background">#803496DB</color>
+
+    <!-- CHANGED: Ganti dari transparan putih ke warna solid -->
+    <color name="hint_color">#78909C</color> <!-- Blue Grey 400 - untuk hint text -->
+    <color name="label_color">#ECEFF1</color> <!-- Blue Grey 50 - untuk label -->
+    <color name="card_background">#37474F</color> <!-- Blue Grey 800 - untuk search card -->
+    <color name="weather_card_background">#546E7A</color> <!-- Blue Grey 600 - untuk weather card -->
+
+    <color name="blogin">#2196F3</color>
+    <color name="gray">#808080</color>
+    <color name="welcome_card_background">#1E90FF</color>
+
+    <!-- Weather condition colors -->
+    <color name="sunny">#FFEB3B</color> <!-- Yellow for sunny -->
+    <color name="rainy">#1976D2</color> <!-- Blue for rainy -->
+    <color name="cloudy">#90A4AE</color> <!-- Gray for cloudy -->
+    <color name="snowy">#FFFFFF</color> <!-- White for snowy -->
+    <color name="default_weather">#00BCD4</color>
+
+    <!-- Background colors for weather conditions -->
+    <color name="sunny_background">#FFFAE3</color> <!-- Light Yellow -->
+    <color name="rainy_background">#A7C7E7</color> <!-- Light Blue -->
+    <color name="cloudy_background">#D3D3D3</color> <!-- Light Gray -->
+    <color name="snowy_background">#F0F8FF</color> <!-- Alice Blue -->
+    <color name="default_weather_background">#E0E0E0</color> <!-- Very Light Gray -->
+
+    <color name="solid_background_color">#ADD8E6</color>
+
 </resources>
